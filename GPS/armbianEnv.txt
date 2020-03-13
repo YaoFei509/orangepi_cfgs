@@ -1,0 +1,6 @@
+# GPS NTP
+overlays=uart2 pps-gpio
+#PA3 for UART2
+param_pps_pin=PA3
+#PA7 for UART1
+#param_pps_pin=PA7  
