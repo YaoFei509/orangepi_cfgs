@@ -1,0 +1,5 @@
+# For One , use bus 0
+# For Zero, use bus 1
+overlays=spi-spidev 
+param_spidev_spi_bus=0
+param_spidev_spi_cs=0

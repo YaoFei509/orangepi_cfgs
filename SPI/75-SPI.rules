@@ -1,0 +1,3 @@
+# Put in /etc/udev/rules.d
+# Make any SPI devices all read/writable
+SUBSYSTEM=="spidev", MODE="0666"
