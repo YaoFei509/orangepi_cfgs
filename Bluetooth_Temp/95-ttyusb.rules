@@ -1,0 +1,3 @@
+# for any USB serial and Bluetooth RFCOMM devices
+SUBSYSTEM=="tty", ACTION=="add", KERNEL=="ttyUSB*", MODE="0666"
+SUBSYSTEM=="tty", ACTION=="add", KERNEL=="rfcomm*", MODE="0666"
