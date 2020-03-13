@@ -5,6 +5,16 @@ My OrangePi One/Zero toys
 # SPI 
 use the SPI interface of OrangePi One/Zero to attach a MAX6675 thermcouple.
 
+ the MAX6675 connects to OPi One as:
+
+|MAX6675| One GPIO |
+| :-: | :-: | 
+|VCC| PIN17 |
+|GND| PIN20 |
+|SCK| PIN23 |
+|CS | PIN24 |
+|SO | PIN21 |
+
 # GPS
 use GPS module connected to UART, read GPS time and feed to NTP as a Time base.
 
