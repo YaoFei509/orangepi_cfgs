@@ -18,13 +18,24 @@ db   = 'yfhome'
 cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
 cursor = cnx.cursor()
 
-s = serial.Serial(PORT, 9600)
+while True:
+    print ("Open:")
+    try :
+        s = serial.Serial(PORT, 9600)
+        line1 = s.readline()
 
+    except serial.serialutil.SerialException :
+           continue
+    else :
+        break
+
+print ("Connected")
+    
 while True:
     # repeat 10 times to read from rfcomm
     t = 0
     while (t<10):
-        try:
+        try :
             # Now time
             tnow = int(time.time())   
             line1 = s.readline().decode('ascii').split()
@@ -32,7 +43,7 @@ while True:
         except serial.serialutil.SerialException:
             t += 1
 
-        else:
+        else :
             break
 
     if (t == 10) :
