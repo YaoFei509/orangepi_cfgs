@@ -15,7 +15,7 @@ PWD  = 'www'
 HOST = 'yfhomeserver.local'
 DB   = 'yfhome'
 
-SQL  = "INSERT home_temp VALUES (0, %s, %s, %s, %s )"
+SQL  = "INSERT INTO home_temp VALUES (0, %s, %s, %s, %s )"
 
 cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 cursor = cnx.cursor()
@@ -51,7 +51,7 @@ while True:
         val = (tnow, str(line1[0]), float(line1[1]), str(line1[2]))
         print(val)
         cursor.execute(SQL, val)
-        cnx.commit
+        cnx.commit()
 
     except mysql.connector.Error as err:
         print("insert table 'home_temp' failed.")
