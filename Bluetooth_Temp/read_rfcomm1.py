@@ -52,12 +52,12 @@ try:
     print(sql)
         
     cursor.execute(sql)
+    cnx.commit()
 
 except mysql.connector.Error as err:
     print("insert table 'mytable' failed.")
     print("Error: {}".format(err.msg))
     sys.exit()
 
-cnx.commit()
 cursor.close()
 cnx.close()
