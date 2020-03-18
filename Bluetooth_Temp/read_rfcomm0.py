@@ -10,12 +10,14 @@ import serial
 
 PORT = "/dev/rfcomm0"
 
-user = 'www'
-pwd  = 'www'
-host = 'yfhomeserver.local'
-db   = 'yfhome'
+USER = 'www'
+PWD  = 'www'
+HOST = 'yfhomeserver.local'
+DB   = 'yfhome'
 
-cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
+SQL  = "INSERT home_temp VALUES (0, %s, %s, %s, %s )"
+
+cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 cursor = cnx.cursor()
 
 while True:
@@ -32,21 +34,12 @@ while True:
 print ("Connected")
     
 while True:
-    # repeat 10 times to read from rfcomm
-    t = 0
-    while (t<10):
-        try :
-            # Now time
-            tnow = int(time.time())   
-            line1 = s.readline().decode('ascii').split()
+    try :
+        # Now time
+        tnow = int(time.time())   
+        line1 = s.readline().decode('ascii').split()
 
-        except serial.serialutil.SerialException:
-            t += 1
-
-        else :
-            break
-
-    if (t == 10) :
+    except serial.serialutil.SerialException:
         print ("RFCOMM fail")
         break
 
@@ -55,16 +48,15 @@ while True:
         continue
 
     try:
-        sql = "INSERT home_temp VALUES (0, {}, '{}', {}, '{}')".format(tnow, str(line1[0]), str(line1[1]), str(line1[2]))
-        print(sql)
-        cursor.execute(sql)
+        val = (tnow, str(line1[0]), float(line1[1]), str(line1[2]))
+        print(val)
+        cursor.execute(SQL, val)
+        cnx.commit
 
     except mysql.connector.Error as err:
-        print("insert table 'mytable' failed.")
+        print("insert table 'home_temp' failed.")
         print("Error: {}".format(err.msg))
         break 
-    else:
-        cnx.commit
 
 s.close
 cursor.close()
