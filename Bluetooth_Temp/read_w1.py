@@ -12,7 +12,7 @@ db   = 'yfhome'
 
 cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
 cursor = cnx.cursor()
-isql = "INSERT home_temp VALUES "    
+SQL = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s) "
 
 try:
     tnow = int(time.time())   
@@ -22,17 +22,16 @@ try:
             stemp = sensor.get_temperature()
             ssum += stemp
         ssum /= 3
-        sql = isql + "(0, {}, 0, {:.2f}, '28{}')".format(tnow, ssum, sensor.id)
-        print(sql)
+        val = (tnow, ssum, "28"+sensor.id)
+        print(val)
         
-        cursor.execute(sql)
+        cursor.execute(SQL, val)
+        cnx.commit()
 
 except mysql.connector.Error as err:
-    print("insert table 'mytable' failed.")
+    print("insert table 'home_temp' failed.")
     print("Error: {}".format(err.msg))
     sys.exit()
 
-
-cnx.commit()
 cursor.close()
 cnx.close()
