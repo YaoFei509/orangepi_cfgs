@@ -14,7 +14,7 @@ DB   = 'yfhome'
 
 SQL  = "INSERT INTO home_temp VALUES (0, %s, %s, %s, %s )"
 
-if sys.argv[1]:
+if len(sys.argv) > 2:
     PORT = sys.argv[1]
 else:
     PORT = "/dev/rfcomm0"
