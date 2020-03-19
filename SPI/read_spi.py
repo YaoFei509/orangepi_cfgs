@@ -39,7 +39,7 @@ try:
 # for DEBUG only     
 #    print(val)
         
-    cursor.execute(sql, val)
+    cursor.execute(SQL, val)
 
 except mysql.connector.Error as err:
     print("insert table 'home_temp' failed.")
