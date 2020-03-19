@@ -3,24 +3,23 @@
 #
 # Read MAX6675 from SPI interface and send to database
 #
-
-import mysql.connector
 import sys
 import time
 import spidev
+import mysql.connector
 
-spi = spidev.SpiDev()  # for One, 0.0, for Zero: 1,0
-spi.open(0,0)          # for One, 0.0, for Zero: 1,0
+SPI = spidev.SpiDev()  # for One, 0.0, for Zero: 1,0
+SPI.open(0, 0)          # for One, 0.0, for Zero: 1,0
 
 # Read 5 times, and use average value
-temp = 0;
+temp = 0
 for i in range(5):
-    resp = spi.readbytes(2)
+    resp = SPI.readbytes(2)
     temp += ((resp[1] + resp[0]*256) & 0x7ff8)
     time.sleep(0.2)   # min 0.18s
 
-spi.close
-temp /= 160 ; # /8/5*0.25 
+SPI.close()
+temp /= 160 # /8/5*0.25 
 
 # Insert to database
 USER = 'www'
@@ -36,10 +35,8 @@ cursor = cnx.cursor()
 try:
     tnow = int(time.time())
     val  = (tnow, float(temp), '28-KTHERFISH')
-# for DEBUG only     
-#    print(val)
-        
     cursor.execute(SQL, val)
+    #print (val)
 
 except mysql.connector.Error as err:
     print("insert table 'home_temp' failed.")
