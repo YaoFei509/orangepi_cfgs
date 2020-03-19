@@ -10,7 +10,7 @@ import time
 import serial
 import mysql.connector
 
-if len(sys.argv) > 2:
+if len(sys.argv) > 1:
     PORT = sys.argv[1]
 else:
     PORT = "/dev/rfcomm1"
