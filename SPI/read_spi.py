@@ -17,31 +17,32 @@ temp = 0;
 for i in range(5):
     resp = spi.readbytes(2)
     temp += ((resp[1] + resp[0]*256) & 0x7ff8)
-    time.sleep(0.01)
+    time.sleep(0.2)   # min 0.18s
 
 spi.close
 temp /= 160 ; # /8/5*0.25 
 
 # Insert to database
-user = 'www'
-pwd  = 'www'
-host = 'yfhomeserver.local'
-db   = 'yfhome'
+USER = 'www'
+PWD  = 'www'
+HOST = 'yfhomeserver.local'
+DB   = 'yfhome'
+
+SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
 cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
 cursor = cnx.cursor()
-isql = "INSERT home_temp VALUES "    
 
 try:
-    tnow = int(time.time())   
-    sql = isql + "(0, {}, 0, {:.2f}, '28-KTHERFISH')".format(tnow, temp)
+    tnow = int(time.time())
+    val  = (tnow, float(temp), '28-KTHERFISH')
 # for DEBUG only     
-#    print(sql)
+#    print(val)
         
-    cursor.execute(sql)
+    cursor.execute(sql, val)
 
 except mysql.connector.Error as err:
-    print("insert table 'mytable' failed.")
+    print("insert table 'home_temp' failed.")
     print("Error: {}".format(err.msg))
     sys.exit()
 
