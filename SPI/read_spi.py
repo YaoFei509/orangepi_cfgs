@@ -36,13 +36,12 @@ try:
     tnow = int(time.time())
     val  = (tnow, float(temp), '28-KTHERFISH')
     cursor.execute(SQL, val)
+    cnx.commit()
     #print (val)
 
 except mysql.connector.Error as err:
     print("insert table 'home_temp' failed.")
     print("Error: {}".format(err.msg))
-    sys.exit()
 
-cnx.commit()
 cursor.close()
 cnx.close()
