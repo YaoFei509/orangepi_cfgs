@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
 # Read 18B20 from Bluetooth
-# 
 
-import mysql.connector
 import sys
 import time
 import serial
+import mysql.connector
 
 USER = 'www'
 PWD  = 'www'
@@ -15,39 +14,39 @@ DB   = 'yfhome'
 
 SQL  = "INSERT INTO home_temp VALUES (0, %s, %s, %s, %s )"
 
-if sys.arg[1] :
+if sys.argv[1]:
     PORT = sys.argv[1]
-else :
+else:
     PORT = "/dev/rfcomm0"
 
 cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 cursor = cnx.cursor()
 
 while True:
-    print ("Open:")
-    try :
+    print("Open:")
+    try:
         s = serial.Serial(PORT, 9600)
         line1 = s.readline()
 
-    except serial.serialutil.SerialException :
-           continue
-    else :
+    except serial.serialutil.SerialException:
+        continue
+    else:
         break
 
-print ("Connected")
-    
+print("Connected")
+
 while True:
-    try :
+    try:
         # Now time
-        tnow = int(time.time())   
+        tnow = int(time.time())
         line1 = s.readline().decode('ascii').split()
 
     except serial.serialutil.SerialException:
-        print ("RFCOMM fail")
+        print("RFCOMM fail")
         break
 
     # per minute
-    if (tnow % 60) > 0 :
+    if (tnow % 60) > 0:
         continue
 
     try:
@@ -61,6 +60,6 @@ while True:
         print("Error: {}".format(err.msg))
         break 
 
-s.close
+s.close()
 cursor.close()
 cnx.close()
