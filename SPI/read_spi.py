@@ -30,7 +30,7 @@ DB   = 'yfhome'
 
 SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
-cnx = mysql.connector.connect(user=user, password=pwd, host=host, database=db)
+cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 cursor = cnx.cursor()
 
 try:
