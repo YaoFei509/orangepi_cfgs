@@ -9,12 +9,11 @@ import spidev
 
 # Read from MAX6675
 def read_max6675(bus):
-
     # Read 5 times, and use average value
     temp = 0
     for i in range(5):
         resp = bus.readbytes(2)
-        temp += ((resp[1] + resp[0]*256) & 0x7ff8)
+        temp += (resp[1] + resp[0] << 8) & 0x7ff8
         time.sleep(0.2)   # min 0.18s
 
     temp /= 160 # /8/5*0.25
@@ -31,7 +30,7 @@ def read_max31855(bus):
     if t & 0x800:
         internal = internal - 4096
     internal *= 0.0625
-    
+
     if t & 0x7:
         temp = float('NaN')
         print("Sensor error:  {}".format(resp[3] & 7))
@@ -53,8 +52,8 @@ DB   = 'yfhome'
 
 SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
-cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
-cursor = cnx.cursor()
+CNX = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
+CURSOR = CNX.CURSOR()
 
 SPI = spidev.SpiDev()
 SPI.open(0,0)
@@ -64,13 +63,13 @@ SPI.close()
 try:
     tnow = int(time.time())
     val  = (tnow, float(temp), '28-KTHERFISH')
-    print (val)
-    cursor.execute(SQL, val)
-    cnx.commit()
+    print(val)
+    CURSOR.execute(SQL, val)
+    CNX.commit()
 
 except mysql.connector.Error as err:
     print("insert table 'home_temp' failed.")
     print("Error: {}".format(err.msg))
 
-cursor.close()
-cnx.close()
+CURSOR.close()
+CNX.close()
