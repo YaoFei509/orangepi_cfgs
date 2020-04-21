@@ -53,7 +53,7 @@ DB   = 'yfhome'
 SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
 CNX = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
-CURSOR = CNX.CURSOR()
+CURSOR = CNX.cursor()
 
 SPI = spidev.SpiDev()
 SPI.open(0,0)
