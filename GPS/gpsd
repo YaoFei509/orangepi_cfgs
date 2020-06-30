@@ -11,4 +11,4 @@ USBAUTO="false"
 DEVICES="/dev/ttyS2"
 
 # Other options you want to pass to gpsd
-GPSD_OPTIONS="-G -n "
+GPSD_OPTIONS=" -G -n "
