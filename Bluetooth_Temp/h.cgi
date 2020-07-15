@@ -38,13 +38,7 @@ foreach $loc (@locs) {
 
     next if $dsid == "";
 
-#    $sql = qq [ SELECT DATE_FORMAT(from_unixtime(time), '%m/%e %T') as mtime, temperature  \
-#	from home_temp \
-#	where location = "$dsid" and time > ($nowtime - 72*3600) and (time % 60 = 0)];
-
     $sql = qq[ SELECT DATE_FORMAT(from_unixtime(time), '%m/%e %T') as mtime, temperature   from home_temp  where location = "$dsid" and row_id > 96370000 order by time desc limit 2880 ];
-#    $sql = qq[ SELECT DATE_FORMAT(from_unixtime(time), '%m/%e %T') as mtime, temperature   from home_temp  where location = "$dsid" order by time desc limit 86400 ];
-#print "sql = $sql\n";
     
     $sth    = $dbh->prepare($sql) || die "DBI error with connect to database.\n";
     $result = $sth->execute       || die "DBI error with execute.\n";
@@ -80,7 +74,7 @@ foreach $loc (@locs) {
 	set ylabel  "摄氏度 {/Symbol \260}C"
 	set grid  
 #	plot "$tmpfile[0]" using 1:3 title "实测" with step, "$tmpfile[0]" using 1:3 title "平滑" smooth csplines, "$tmpfile[1]" using 1:3 title "户外" with step, "$tmpfile[2]" using 1:3 title "鱼缸" w step, "$tmpfile[3]" using 1:3 title "客厅" w step
-	plot "$tmpfile[0]" using 1:3 title "实测" smooth csplines, "$tmpfile[1]" using 1:3 title "户外" with step, "$tmpfile[2]" using 1:3 title "鱼缸" w step, "$tmpfile[3]" using 1:3 title "客厅" w step, "$tmpfile[4]" using 1:3 title "Fish 2" w step
+	plot "$tmpfile[0]" using 1:3 title "阁楼" w step, "$tmpfile[1]" using 1:3 title "户外" w step, "$tmpfile[2]" using 1:3 title "鱼缸" w step, "$tmpfile[3]" using 1:3 title "客厅" w step, "$tmpfile[4]" using 1:3 title "鱼缸热电偶" smooth csplines
 GEND
 
     close(GNUPLOT);
@@ -98,5 +92,3 @@ GEND
     unlink($imgfile);
 
 $dbh->disconnect;
-
-
