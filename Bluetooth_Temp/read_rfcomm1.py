@@ -30,7 +30,7 @@ SER = serial.Serial(PORT, 9600)
 while (t<10):
     try:
         SER.write(b'n')
-        num = SER.readline()
+        num = int(SER.readline())
         SER.write(b't')
 
         line1 = SER.readline().decode('ascii').split()
@@ -51,17 +51,18 @@ if t==10:
 
 cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 cursor = cnx.cursor()
-ISQL = "INSERT home_temp VALUES "    
+ISQL = "INSERT home_temp VALUES (0, %s, 0, %s, %s) "    
 
 try:
-    sql = ISQL + "(0, {}, 0, {}, '{}')".format(tnow, str(line1[1]), str(line1[0]))
+    val = (tnow, str(line1[1]), str(line1[0]))
+    cursor.execute(ISQL, val)
+    print ( num, line1[1])
 
     if num == 2 :
-        sql += ",(0, {}, 0, {}, '{}')".format(tnow, line2[1], line2[0])
+        val = (tnow, str(line2[1]), str(line2[0]))
+        cursor.execute(ISQL, val)
+        print ( line2[1])
 
-    print(sql)
-        
-    cursor.execute(sql)
     cnx.commit()
 
 except mysql.connector.Error as err:
