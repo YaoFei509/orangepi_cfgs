@@ -29,9 +29,13 @@ SER = serial.Serial(PORT, 9600)
 
 while (t<10):
     try:
+        SER.write(b'n')
+        num = SER.readline()
         SER.write(b't')
+
         line1 = SER.readline().decode('ascii').split()
-        line2 = SER.readline().decode('ascii').split()
+        if num == 2:
+            line2 = SER.readline().decode('ascii').split()
 
     except serial.serialutil.SerialException:
         t += 1
@@ -50,8 +54,11 @@ cursor = cnx.cursor()
 ISQL = "INSERT home_temp VALUES "    
 
 try:
-    sql = ISQL + "(0, {}, 0, {}, '{}')".format(tnow, str(line1[1]), str(line1[0])) \
-        + ",(0, {}, 0, {}, '{}')".format(tnow, line2[1], line2[0])
+    sql = ISQL + "(0, {}, 0, {}, '{}')".format(tnow, str(line1[1]), str(line1[0]))
+
+    if num == 2 :
+        sql += ",(0, {}, 0, {}, '{}')".format(tnow, line2[1], line2[0])
+
     print(sql)
         
     cursor.execute(sql)
