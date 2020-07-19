@@ -34,8 +34,10 @@ while (t<10):
         SER.write(b't')
 
         line1 = SER.readline().decode('ascii').split()
+        print (line1)
         if num == 2:
             line2 = SER.readline().decode('ascii').split()
+            print (line2)
 
     except serial.serialutil.SerialException:
         t += 1
@@ -56,12 +58,10 @@ ISQL = "INSERT home_temp VALUES (0, %s, 0, %s, %s) "
 try:
     val = (tnow, str(line1[1]), str(line1[0]))
     cursor.execute(ISQL, val)
-    print ( num, line1[1])
 
     if num == 2 :
         val = (tnow, str(line2[1]), str(line2[0]))
         cursor.execute(ISQL, val)
-        print ( line2[1])
 
     cnx.commit()
 
