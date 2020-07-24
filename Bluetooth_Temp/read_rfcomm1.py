@@ -23,21 +23,26 @@ DB   = 'yfhome'
 # Now time
 tnow = int(time.time())
 
-# repeat 5 times to read from rfcomm
+# repeat 10 times to read from rfcomm
 t = 0
+tt = [0, 0]
+
 SER = serial.Serial(PORT, 9600)
 
 while (t<10):
     try:
         SER.write(b'n')
         num = int(SER.readline())
-        SER.write(b't')
 
-        line1 = SER.readline().decode('ascii').split()
-        print (line1)
-        if num == 2:
-            line2 = SER.readline().decode('ascii').split()
-            print (line2)
+        for i in range(3) :
+            SER.write(b't')
+
+            line1 = SER.readline().decode('ascii').split()
+            tt[0] += float(line1[1])
+
+            if num == 2:
+                line2 = SER.readline().decode('ascii').split()
+                tt[1] += float(line2[1])
 
     except serial.serialutil.SerialException:
         t += 1
@@ -56,12 +61,14 @@ cursor = cnx.cursor()
 ISQL = "INSERT home_temp VALUES (0, %s, 0, %s, %s) "    
 
 try:
-    val = (tnow, str(line1[1]), str(line1[0]))
+    val = (tnow, str(tt[0] / 3), str(line1[0]))
     cursor.execute(ISQL, val)
+    print ( num, tt[0]/3)
 
     if num == 2 :
-        val = (tnow, str(line2[1]), str(line2[0]))
+        val = (tnow, str(tt[1]/3), str(line2[0]))
         cursor.execute(ISQL, val)
+        print ( tt[1]/3 )
 
     cnx.commit()
 
