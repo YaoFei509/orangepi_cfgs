@@ -4,7 +4,6 @@
 # Read MAX 31855 or MAX6675 from SPI interface and send to database
 #
 import time
-import mysql.connector
 import spidev
 
 # Read from MAX6675
@@ -44,32 +43,10 @@ def read_max31855(bus):
     temp *= 0.25
     return temp
 
-# Insert to database
-USER = 'www'
-PWD  = 'www'
-HOST = 'yfhomeserver.local'
-DB   = 'yfhome'
-
-SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
-
-CNX = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
-CURSOR = CNX.cursor()
-
 SPI = spidev.SpiDev()
 SPI.open(0,0)
 temp = read_max31855(SPI)
 SPI.close()
 
-try:
-    tnow = int(time.time())
-    val  = (tnow, float(temp), '28-KTHERFISH')
-    print(val)
-    CURSOR.execute(SQL, val)
-    CNX.commit()
-
-except mysql.connector.Error as err:
-    print("insert table 'home_temp' failed.")
-    print("Error: {}".format(err.msg))
-
-CURSOR.close()
-CNX.close()
+tnow = int(time.time())
+print(tnow, float(temp))
