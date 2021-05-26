@@ -45,7 +45,7 @@ if t==10:
     print("RFCOMM fail")
     sys.exit()
 
-cnx = mysql.connector.connect(USER, PWD, HOST, DB)
+cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 cursor = cnx.cursor()
 ISQL = "INSERT home_temp VALUES "    
 
