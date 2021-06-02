@@ -8,7 +8,7 @@ my $password='www';
 
 my $dsn = "DBI:mysql:database=$database:host=$server";
 my $dbh = DBI->connect($dsn, $username, $password) || die "Can't connect.\n";
-@locs = ("Up Room", "Up Out 18", "Fish Zero", "Down Room Zero", "Fish", "Fish 2");
+@locs = ("Fish 2", "Fish", "Up Room", "Up Out 18", "Fish Zero", "Down Room Zero");
 
 # for CGI header
 $|=1;
@@ -73,7 +73,7 @@ foreach $loc (@locs) {
 	set xdata   time
 	set ylabel  "摄氏度 {/Symbol \260}C"
 	set grid  
-	array titles[6] = ["阁楼", "户外", "鱼缸", "客厅", "鱼缸BT", "鱼缸热电偶"]
+	array titles[6] = ["鱼缸热电偶", "鱼缸BT", "阁楼", "户外", "鱼缸", "客厅"]
 	plot for [i=0:$k] file="/tmp/tmpdata$procid".i.".dat" file using 1:3 t titles[i+1] w line lw i 
 GEND
 
