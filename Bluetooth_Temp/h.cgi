@@ -8,7 +8,7 @@ my $password='www';
 
 my $dsn = "DBI:mysql:database=$database:host=$server";
 my $dbh = DBI->connect($dsn, $username, $password) || die "Can't connect.\n";
-@locs = ("Up Room", "Up Out", "Fish", "Up Out 18", "Fish 2"); #"Down Room");
+@locs = ("Up Room", "Up Out 18", "Fish Zero", "Down Room Zero", "Fish", "Fish 2");
 
 # for CGI header
 $|=1;
@@ -73,19 +73,20 @@ foreach $loc (@locs) {
 	set xdata   time
 	set ylabel  "摄氏度 {/Symbol \260}C"
 	set grid  
-	plot "$tmpfile[0]" using 1:3 title "阁楼" w line, "$tmpfile[1]" using 1:3 title "户外" w line, "$tmpfile[2]" using 1:3 title "鱼缸" w step, "$tmpfile[3]" using 1:3 title "客厅" w line, "$tmpfile[4]" using 1:3 title "鱼缸热电偶" smooth csplines
+	array titles[6] = ["阁楼", "户外", "鱼缸", "客厅", "鱼缸BT", "鱼缸热电偶"]
+	plot for [i=0:$k] file="/tmp/tmpdata$procid".i.".dat" file using 1:3 t titles[i+1] w line lw i 
 GEND
 
     close(GNUPLOT);
-    unlink($tmpfile[0]);
-    unlink($tmpfile[1]);
-    unlink($tmpfile[2]);
-    unlink($tmpfile[3]);
-    
+
+    do { 
+    	unlink($tmpfile[$k]);
+    } while ($k-- > 0) ;
+
 # send the image data to client
     open(INPUT, "<$imgfile");
     while(<INPUT>) {
-	print;
+	    print;
     }
     close(INPUT);
     unlink($imgfile);
