@@ -22,7 +22,8 @@ try:
             stemp = sensor.get_temperature()
             ssum += stemp
         ssum /= 3
-        val = (tnow, ssum, "28"+sensor.id)
+        val = (tnow, format(ssum, "0.1f"), "28"+sensor.id)
+
         print(val)
         
         cursor.execute(SQL, val)
