@@ -11,11 +11,10 @@
 #
 # By default this script does nothing.
 
-rfcomm bind 0 20:15:05:18:76:22
-rfcomm bind 1 20:15:05:18:75:66
-
-sudo -iu yaofei screen -dmS cewen_bt bash -c ' /home/yaofei/temp/cewen_bt.sh ; exec bash '
-
-sudo -iu yaofei screen -dmS cewen bash -c ' /home/yaofei/temp/cewen.sh; exec bash '
+# register bluetooth devices, obsolete
+#rfcomm bind 0 20:15:05:18:76:22
+#rfcomm bind 1 20:15:05:18:75:66
+#sudo -iu yaofei screen -dmS cewen_bt bash -c ' /home/yaofei/temp/cewen_bt.sh ; exec bash '
+#sudo -iu yaofei screen -dmS cewen bash -c ' /home/yaofei/temp/cewen.sh; exec bash '
 
 exit 0
