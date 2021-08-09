@@ -1,3 +1,6 @@
 #1-Wire for DS18B20
 overlays=w1-gpio
+# For One:
 param_w1_pin=PA20
+# For Zero (opizerofish)
+#param_w1_pin=PA7
