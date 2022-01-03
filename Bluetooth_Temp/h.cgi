@@ -37,7 +37,7 @@ foreach $loc (@locs) {
 
     next if $dsid == "";
 
-    $sql = qq[ SELECT DATE_FORMAT(from_unixtime(time), '%m/%e %T') AS mtime, 
+    $sql = qq[ SELECT DATE_FORMAT(from_unixtime(time), '%Y/%m/%e %T') AS mtime, 
                temperature FROM home_temp WHERE location = "$dsid" AND time > $day3 ];
     
     $sth    = $dbh->prepare($sql) || die "DBI error with connect to database.\n";
@@ -66,7 +66,7 @@ $gplot = qq[ set term pngcairo enhanced size 2048,1536
              set output  "$imgfile"
 	     set title   "96小时以来的室温"
 	     set xlabel  "日期 时间"
-	     set timefmt "%m/%d %H:%M:%S"
+	     set timefmt "%Y/%m/%d %H:%M:%S"
 	     set xdata   time
 	     set ylabel  "摄氏度 {/Symbol \260}C"
 	     set grid
