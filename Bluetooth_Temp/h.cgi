@@ -79,11 +79,6 @@ open(GNUPLOT, $gnuplot);
 print GNUPLOT $gplot;
 close(GNUPLOT);
 
-do { 
-    $tmpfile = "/tmp/tmpdata$procid$k.dat";
-    unlink($tmpfile);
-} while ($k-- > 0) ;
-
 # send the image data to client
 open(INPUT, "<$imgfile");
 while(<INPUT>) {
@@ -91,5 +86,11 @@ while(<INPUT>) {
 }
 close(INPUT);
 unlink($imgfile);
+
+#delete temp data files
+do { 
+    $tmpfile = "/tmp/tmpdata$procid$k.dat";
+    unlink($tmpfile);
+} while ($k-- > 0) ;
 
 $dbh->disconnect;
