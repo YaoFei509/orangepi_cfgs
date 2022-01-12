@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import mysql.connector
+from mysql.connector import Error
 import sys, os
 import time
 import cgi
@@ -23,7 +24,7 @@ try:
 
     locs = ['Up Room', 'Up Out 18', 'Fish Zero', 'Down Room Zero' ]
     loc_sql = "SELECT id from ds18b20 where location = %s "
-    temp_sql = "SELECT DATE_FORMAT(from_unixtime(time), '%Y/%m/%e %T') AS mtime, temperature FROM home_temp WHERE location = %s AND time > %d "
+    temp_sql = "SELECT DATE_FORMAT(from_unixtime(time), '%Y/%m/%e %T') AS mtime, temperature FROM home_temp WHERE location = %s AND time > %s "
     
     for l in locs:
         print(l)
@@ -39,14 +40,14 @@ try:
             dsid = row[0]
             print(dsid, day3)
             
-            cursor.execute(temp_sql, (dsid, day3, ))
+            cursor.execute(temp_sql, (dsid, day3))
             rows = cursor.fetchall()
 
             for row in rows:
                 print(row[0])
                 
-        except:
-            print("no temp data")
+        except Error as e:
+            print("no temp data", e)
             continue
 
 except Error as e:
