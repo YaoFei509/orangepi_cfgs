@@ -1,0 +1,23 @@
+#  /etc/systemd/system/chinadns-ng.service
+[Unit]
+Description=ChinaDNS-NG Service
+After=network-online.target
+
+[Service]
+Type=simple
+DynamicUser=true
+#在chinadns-ng.service添加如下即可解决ipset持久化
+ExecStartPre=/bin/bash /usr/local/bin/ipset-start.sh
+ExecStopPost=/bin/bash /usr/local/bin/ipset-stop.sh
+User=root
+Group=root
+ExecStart=/usr/local/bin/chinadns-ng -l 53533 \
+	-t 127.0.0.1#60053 \
+	-c 223.5.5.5 \
+	-g /usr/local/etc/gfwlist.txt \
+	-m /usr/local/etc/chnlist.txt \
+	--reuse-port 
+#--repeat-time 3
+
+[Install]
+WantedBy=multi-user.target
