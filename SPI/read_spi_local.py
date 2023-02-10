@@ -24,6 +24,8 @@ def read_max31855(bus):
 
     t = (resp[0] << 24) | (resp[1] << 16) | (resp[2] << 8) | resp[3]
 
+    print ( "Resp: {:08b} {:08b} {:08b} {:08b} ".format(resp[0], resp[1], resp[2],resp[3]))
+
     #Internal code-juncton
     internal = (t >> 4) & 0x7ff
     if t & 0x800:
@@ -44,9 +46,12 @@ def read_max31855(bus):
     return temp
 
 SPI = spidev.SpiDev()
-SPI.open(0,0)
-temp = read_max31855(SPI)
-SPI.close()
 
-tnow = int(time.time())
-print(tnow, float(temp))
+while 1 :
+    SPI.open(0,0)
+    temp = read_max31855(SPI)
+    SPI.close()
+
+    tnow = int(time.time())
+    print(tnow, float(temp))
+    time.sleep(0.2)
