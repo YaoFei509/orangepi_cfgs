@@ -9,13 +9,18 @@
 		<title>家庭服务器</title>
 	</head>
 <body>
+	<script src="https://pv.sohu.com/cityjsonx?timestamp='+new Date().getTime()+'" charset="utf-8"></script>
 <h1 align=center>家庭服务器Orange Pi Zero2</h1>
 <hr>
 <center>
 <img src="/cgi-bin/h.cgi" width=1024 height=768>
 </center>
 <hr>
-<center>运行在<a href="http://www.orangepi.cn">Orange Pi Zero2</a>上</center>
+<center>运行在<a href="http://www.orangepi.cn">Orange Pi Zero2</a>上
+	<script>
+		document.write(" 你来自 " + returnCitySN["cname"] + '(' + returnCitySN["cip"] + ')');
+	</script>
+</center>
 </body>
 </html>
 
