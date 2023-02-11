@@ -9,9 +9,14 @@ import spidev
 
 # Read from MAX6675
 def read_max6675(bus):
-    resp = bus.readbytes(2)
-    temp = (resp[1] + resp[0] << 8) & 0x7ff8
-    temp /= 32 # /8*0.25
+    # Read 5 times, and use average value
+    temp = 0
+    for i in range(5):
+        resp = bus.readbytes(2)
+        temp += (resp[1] + resp[0] << 8) & 0x7ff8
+        time.sleep(0.2)   # min 0.18s
+
+    temp /= 160 # /8/5*0.25
     return temp
 
 def read_max31855(bus):
@@ -25,10 +30,6 @@ def read_max31855(bus):
         internal = internal - 4096
     internal *= 0.0625
 
-    if t & 0x7:
-        temp = float('NaN')
-        print("Sensor error:  {}".format(resp[3] & 7))
-
     if t&0x80000000:
         temp = t >> 18
         temp = temp - 16384
@@ -36,6 +37,11 @@ def read_max31855(bus):
         temp = t >> 18
 
     temp *= 0.25
+
+    if t & 0x7:
+        temp = float('NaN')
+        print("Sensor error:  {}".format(resp[3] & 7))
+
     return temp
 
 # Insert to database
@@ -44,26 +50,23 @@ PWD  = 'www'
 HOST = 'yfhomeserver.local'
 DB   = 'yfhome'
 
-SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
+tt = [0]*7
 
-tt = [0] * 7
+SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
 CNX = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
 CURSOR = CNX.cursor()
 
 SPI = spidev.SpiDev()
 SPI.open(0,0)
-SPI.max_speed_hz = 1000000
+SPI.max_speed_hz = 200000
 
-# read 7 times
-for i in range(7):
-    tt[i] = read_max31855(SPI)
-    time.sleep(0.2)
+while True :
+      temp  = read_max31855(SPI)
+      if temp != float('NaN') :
+            break;
 
 SPI.close()
-
-# drop a MAX and a MIN,  then average
-temp = (sum(tt) - max(tt) - min(tt)) / 5
 
 try:
     tnow = int(time.time())
