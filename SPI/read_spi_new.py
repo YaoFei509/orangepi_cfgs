@@ -9,6 +9,10 @@
 import time
 import mysql.connector
 from max31855 import max31855
+#
+PROBE  = "28-KTHERFISH"
+#PROBE = "28-KTHERAIR"
+#PROBE = "28-KTHERMONE"
 
 # Insert to database
 USER = 'www'
@@ -18,18 +22,40 @@ DB   = 'yfhome'
 
 SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
+# Read from MAX31855
 obj_ = max31855(bus=0,device=0)
 
-while True:
-    ret = obj_.read_value()
-    if ret['fault'] == None :
-        break;
+tmax = -20000
+tmin = 20000
+temp = 0 
 
-temp = ret['t_tc_lin']
+# Read 7 times, remove the Max and the Min, and use average value
+for i in range(7):
+    while True:
+        ret = obj_.read_value()
+        # Skip failure 
+        if ret['fault'] == None :
+            break;
+        else :
+            time.sleep(0.1)
+
+    t = ret['t_tc_lin']
+    temp += t;
+    if t > tmax :
+        tmax = t
+
+    if t < tmin :
+        tmin = t
+
+    time.sleep(0.5)
+
+temp -= tmax
+temp -= tmin
+temp /= 5
 
 try:
     tnow = int(time.time())
-    val  = (tnow, float(temp), '28-KTHERFISH')
+    val  = (tnow, float(temp), PROBE)
 
     CNX = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
     CURSOR = CNX.cursor()
