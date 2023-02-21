@@ -40,4 +40,4 @@ temp -= tmax
 temp -= tmin
 temp /= 5
 
-print(temp)
+print(round(temp, 1))
