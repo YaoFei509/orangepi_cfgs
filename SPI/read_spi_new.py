@@ -55,7 +55,7 @@ temp /= 5
 
 try:
     tnow = int(time.time())
-    val  = (tnow, float(temp), PROBE)
+    val  = (tnow, round(temp, 2), PROBE)
 
     CNX = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
     CURSOR = CNX.cursor()
