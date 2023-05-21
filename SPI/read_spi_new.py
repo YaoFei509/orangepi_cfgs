@@ -9,16 +9,25 @@
 import time
 import mysql.connector
 from max31855 import max31855
+import os
+
 #
-PROBE  = "28-KTHERFISH"
+PROBE = "Test"
+#PROBE  = "28-KTHERFISH"
 #PROBE = "28-KTHERAIR"
 #PROBE = "28-KTHERMONE"
 
 # Insert to database
 USER = 'www'
 PWD  = 'www'
-HOST = 'yfhomeserver.local'
+HOSTLIST  = ['192.168.20.20', 'yfhomeserver.local', 'yfserver.dynv6.net']
 DB   = 'yfhome'
+
+for h in HOSTLIST:
+    response = os.system("ping -c 1 -w2 " + h + " > /dev/null 2>&1") #"ping -c 1 " + h)
+    if response == 0:
+        HOST = h
+        break
 
 SQL  = "INSERT INTO home_temp VALUES (0, %s, 0, %s, %s )"
 
