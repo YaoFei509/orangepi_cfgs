@@ -20,8 +20,8 @@ PROBE = "Test"
 # Insert to database
 USER = 'www'
 PWD  = 'www'
-HOSTLIST  = ['192.168.20.20', 'yfhomeserver.local', 'yfserver.dynv6.net']
 DB   = 'yfhome'
+HOSTLIST  = ['192.168.20.20', 'yfhomeserver.local', 'yfserver.dynv6.net']
 
 for h in HOSTLIST:
     response = os.system("ping -c 1 -w2 " + h + " > /dev/null 2>&1") #"ping -c 1 " + h)
