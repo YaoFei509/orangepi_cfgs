@@ -17,22 +17,22 @@ for h in HOSTLIST:
         HOST = h
         break
 
-tnow = int(time.time())   
-for sensor in W1ThermSensor.get_available_sensors():
-    ssum = 0.0
-    for i in range(3):
-        stemp = sensor.get_temperature()
-        ssum += stemp
-    ssum /= 3
-    val = (tnow, format(ssum, "0.1f"), "28"+sensor.id)
-
-print(val)
-
 try:
     cnx = mysql.connector.connect(user=USER, password=PWD, host=HOST, database=DB)
     cursor = cnx.cursor()
-    cursor.execute(SQL, val)
-    cnx.commit()
+
+    tnow = int(time.time())   
+    for sensor in W1ThermSensor.get_available_sensors():
+        ssum = 0.0
+        for i in range(3):
+            stemp = sensor.get_temperature()
+            ssum += stemp
+        ssum /= 3
+        val = (tnow, format(ssum, "0.1f"), "28"+sensor.id)
+        #print(val)
+
+        cursor.execute(SQL, val)
+        cnx.commit()
 
 except mysql.connector.Error as err:
     print("insert table 'home_temp' failed.")
